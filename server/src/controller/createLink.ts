@@ -22,7 +22,7 @@ export async function shareLink(req: Request, res: Response) {
 
     if (alreadyPresent) {
       const hash = alreadyPresent.hash;
-      const sharableLink = `${process.env.SERVER_URL}/api/v1/brain/${hash}`;
+      const sharableLink = `${process.env.CLIENT_URL}/brain/${hash}`;
       return res.status(200).json({
         hash,
         message: sharableLink,
