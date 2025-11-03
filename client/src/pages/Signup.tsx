@@ -47,7 +47,7 @@ export function Signup() {
       console.log(response);
 
       if (response.status === 201) {
-        navigate("/signin");
+        navigate("/verify-otp", { state: { email } });
       }
     } catch (error) {
       if (
