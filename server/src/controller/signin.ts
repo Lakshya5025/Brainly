@@ -26,6 +26,11 @@ export async function signin(req: Request, res: Response) {
         message: "Invalid username or password.",
       });
     }
+    if (!user.verified) {
+      return res.status(403).json({
+        message: "Please verify your email before logging in.",
+      });
+    }
     const payload = {
       userId: user._id,
       username: user.username,
