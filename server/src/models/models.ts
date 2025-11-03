@@ -1,11 +1,19 @@
 import mongoose, { Schema, Types } from "mongoose";
 const contentType = ["image", "doc", "video", "audio", "tweet"];
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    otp: { type: String, default: null },
+    otpExpiry: { type: Date, default: null },
+    verified: { type: Boolean, default: false },
+    password: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const contentSchema = new mongoose.Schema({
   link: { type: String, required: true },
