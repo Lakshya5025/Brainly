@@ -15,6 +15,8 @@ import { logout } from "./controller/logout.js";
 import cors from "cors";
 import { changePassword, updateUser } from "./controller/user.js";
 import { updateContent } from "./controller/updateContent.js";
+import { transporter } from "./utils/email.js";
+import { verify } from "./controller/verify.js";
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -28,6 +30,7 @@ app.use(
 // --- Routes ---
 app.post("/api/v1/signup", signup);
 app.post("/api/v1/signin", signin);
+app.post("/api/v1/otp-verification", verify);
 app.post("/api/v1/content", auth, addContent);
 app.get("/api/v1/content", auth, getContent);
 app.delete("/api/v1/content/:id", auth, deleteContent);
@@ -48,7 +51,8 @@ async function startServer() {
   try {
     await mongoose.connect(process.env.MONGO_URL);
     console.log("DB connected successfully");
-
+    await transporter.verify();
+    console.log("Mail service is ready");
     app.listen(process.env.PORT, () => {
       console.log(`Server is listening on ${process.env.SERVER_URL}`);
     });
