@@ -4,6 +4,14 @@ import bcrypt from "bcrypt";
 import { validUser } from "../validator/signup.js";
 import { MongoServerError } from "mongodb";
 import { z } from "zod";
+import { mailer } from "../utils/email.js";
+
+function randomOTP() {
+  return Math.floor(Math.random() * 1000000)
+    .toString()
+    .padStart(6, "0");
+}
+
 export async function signup(req: Request, res: Response) {
   const salt = process.env.SALT;
   if (!salt) {
@@ -27,30 +35,33 @@ export async function signup(req: Request, res: Response) {
 
   try {
     const { username, password, email } = validationResult.data;
-
+    const otp = randomOTP();
+    const otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const newUser = new userModel({
-      username,
-      password: hashedPassword,
-      email,
-    });
-
-    await newUser.save();
+    await mailer(email, otp);
+    await userModel.findOneAndUpdate(
+      { email: email.toLowerCase().trim() },
+      {
+        $set: {
+          otp,
+          otpExpiry,
+          verified: false,
+          attempts: 0,
+          username,
+          password: hashedPassword,
+        },
+      },
+      { upsert: true, new: true }
+    );
 
     return res.status(201).json({
       message: "User created successfully.",
       user: {
-        username: newUser.username,
-        email: newUser.email,
+        username,
+        email,
       },
     });
   } catch (err) {
-    if (err instanceof MongoServerError && err.code === 11000) {
-      return res.status(409).json({
-        message: "Username or email is already in use.",
-      });
-    }
     console.error("Error during user creation:", err);
     return res.status(500).json({
       message: "Failed to create user due to a server error.",
