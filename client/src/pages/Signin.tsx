@@ -4,7 +4,7 @@ import { Button } from "../components/Button";
 import { EyeOpen } from "../icons/EyeOpen";
 import { EyeClose } from "../icons/EyeClose";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"; // No change here
 const apiUrl = import.meta.env.VITE_API_URL;
 
 interface InputProps {
@@ -31,9 +31,9 @@ export function Signin() {
   const [password, setPassword] = useState("");
   const [passType, setPassType] = useState("password");
   const navigate = useNavigate();
+
   async function onSignin() {
     try {
-      // 3. Make the API request
       const response = await axios.post(
         `${apiUrl}/signin`,
         {
@@ -50,9 +50,14 @@ export function Signin() {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Invalid username or password.");
+      if (axios.isAxiosError(error) && error.response) {
+        alert(error.response.data.message || "An unknown error occurred.");
+      } else {
+        alert("Login failed. Please check your connection and try again.");
+      }
     }
   }
+  // --- END OF UPDATE ---
 
   function handelVisibility() {
     if (passType == "text") setPassType("password");
