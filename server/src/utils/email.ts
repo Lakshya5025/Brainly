@@ -12,7 +12,7 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-async function mailer(email: string, otp: number) {
+export async function mailer(email: string, otp: string) {
   const html = `<p>Your OTP is <strong>${otp}</strong>. It expires in 5 minutes.</p>`;
   return transporter.sendMail({
     from: `"no-reply" <${process.env.EMAIL}>`,
