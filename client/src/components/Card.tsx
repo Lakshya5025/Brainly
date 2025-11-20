@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShareIcon } from "../icons/ShareIcon";
 import { BinIcon } from "../icons/BinIcon";
 import { SpinnerIcon } from "../icons/SpinnerIcon";
@@ -29,7 +29,7 @@ interface CardProps {
   updateUI: boolean;
   setUpdateUI: (v: boolean) => void;
   type: ContentType;
-  tags: Tag[]; 
+  tags: Tag[];
 }
 
 const CardContent = ({
@@ -41,6 +41,15 @@ const CardContent = ({
   link: string;
   title: string;
 }) => {
+  useEffect(() => {
+    if (type === "tweet") {
+      // @ts-ignore
+      const twttr = window.twttr;
+      if (twttr && twttr.widgets) {
+        twttr.widgets.load();
+      }
+    }
+  }, [type, link]);
   switch (type) {
     case "video":
       try {
