@@ -88,7 +88,7 @@ export function CreateContentModel({
       tags: formData.tags
         .split(",")
         .map((tag) => tag.trim())
-        .filter((tag) => tag), // Split and clean tags
+        .filter((tag) => tag),
     };
 
     console.log("Sending data to backend:", payload);

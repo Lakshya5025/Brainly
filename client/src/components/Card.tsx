@@ -11,12 +11,11 @@ import { SpeakerIcon } from "../icons/SpeakerIcon";
 import { LinkIcon } from "../icons/LinkIcon";
 import { ShareModal } from "./ShareModel";
 import { EditContentModal } from "./EditContetModal";
-import { Pencil } from "../icons/pencil";
+import { Pencil } from "../icons/Pencil";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 type ContentType = "image" | "doc" | "video" | "audio" | "tweet";
 
-// Add this interface for the Tag
 interface Tag {
   _id: string;
   title: string;
@@ -30,7 +29,7 @@ interface CardProps {
   updateUI: boolean;
   setUpdateUI: (v: boolean) => void;
   type: ContentType;
-  tags: Tag[]; // Add tags to the props
+  tags: Tag[]; 
 }
 
 const CardContent = ({
@@ -42,7 +41,6 @@ const CardContent = ({
   link: string;
   title: string;
 }) => {
-  // This function remains the same as your original
   switch (type) {
     case "video":
       try {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Cross } from "../icons/Cross";
 import { Button } from "./Button";
@@ -12,11 +12,6 @@ export function Profile({
   const [user, setUser] = useState({ username: "", email: "" });
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
-  useEffect(() => {
-    // You would typically fetch the user's data from an endpoint
-    // For now, we'll just use a placeholder
-  }, []);
 
   const handleUpdateUser = async () => {
     try {
